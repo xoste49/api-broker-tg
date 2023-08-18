@@ -21,8 +21,6 @@ services:
       - "8123:8000"
     volumes:
       - django-static:/var/www/django/static
-      - .:/code
-    env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
     command: python -Wd manage.py runserver 0.0.0.0:8000
@@ -39,8 +37,6 @@ services:
         condition: service_completed_successfully
     volumes:
       - django-static:/var/www/django/static
-      - .:/code
-    env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
     command: python manage.py start_polling
@@ -55,8 +51,6 @@ services:
         condition: service_started
     volumes:
       - django-static:/var/www/django/static
-      - .:/code
-    env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
     command: python manage.py migrate
