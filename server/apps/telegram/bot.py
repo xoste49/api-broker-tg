@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import Bot, Dispatcher, types
 from asgiref.sync import sync_to_async
 
@@ -8,6 +10,7 @@ API_TOKEN = config('TELEGRAM_BOT_TOKEN')
 
 
 class TelegramBot:
+    logging.basicConfig(level=logging.INFO)
     # Initialize bot and dispatcher
     bot = Bot(token=API_TOKEN)
     dp = Dispatcher(bot)
