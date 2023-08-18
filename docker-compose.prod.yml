@@ -25,6 +25,7 @@ services:
     env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
+      DJANGO_ENV: production
     command: python -Wd manage.py runserver 0.0.0.0:8000
 
   telegram:
@@ -43,6 +44,7 @@ services:
     env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
+      DJANGO_ENV: production
     command: python manage.py start_polling
 
   migrations:
@@ -58,6 +60,7 @@ services:
     env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
+      DJANGO_ENV: production
     command: python manage.py migrate
 
   db:
