@@ -17,6 +17,7 @@ services:
         condition: service_started
       migrations:
         condition: service_completed_successfully
+    restart: unless-stopped
     ports:
       - "8123:8000"
     volumes:
@@ -36,6 +37,7 @@ services:
         condition: service_started
       migrations:
         condition: service_completed_successfully
+    restart: unless-stopped
     volumes:
       - django-static:/var/www/django/static
     env_file: ./config/.env
@@ -60,6 +62,7 @@ services:
 
   db:
     image: postgres:15.3-alpine3.18
+    restart: unless-stopped
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file: ./config/.env
