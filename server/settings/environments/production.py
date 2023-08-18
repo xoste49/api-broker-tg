@@ -13,8 +13,7 @@ from server.settings.components import config
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    # We need this value for `healthcheck` to work:
-    'localhost',
+    config('DOMAIN')
 ]
 
 
