@@ -1,12 +1,15 @@
 import asyncio
 
 from django.utils.crypto import get_random_string
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
+from server.apps.api.models import MessageModel
+from server.apps.api.serializers import MessagesSerializer
 from server.apps.telegram.bot import TelegramBot
 from server.apps.telegram.models import TelegramTokenUserModel, TOKEN_LENGTH, TelegramUserModel
 
@@ -48,7 +51,21 @@ class TelegramViewSet(APIView):
                 {'error': 'Вы ещё не создали токена для работы с Telegram'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        MessageModel.objects.create(user=request.user, text=text)
         for tg_user in TelegramUserModel.objects.filter(token=token_user.token):
             msg = f'{request.user.username}, я получил от тебя сообщение:\n{text}'
             asyncio.run(TelegramBot.send_message(msg, tg_user.tg_id))
         return Response(status=status.HTTP_201_CREATED)
+
+
+class MessagesViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
+    """ViewSet вывода сообщений"""
+
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = MessagesSerializer
+
+    def get_queryset(self):
+        return MessageModel.objects.filter(user=self.request.user)
