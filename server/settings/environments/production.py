@@ -12,9 +12,7 @@ from server.settings.components import config
 
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    config('DOMAIN')
-]
+ALLOWED_HOSTS = config('DOMAINS').split(' ')
 
 
 # Staticfiles
@@ -28,12 +26,7 @@ _COLLECTSTATIC_DRYRUN = config(
 # Adding STATIC_ROOT to collect static files via 'collectstatic':
 STATIC_ROOT = '.static' if _COLLECTSTATIC_DRYRUN else '/var/www/django/static'
 
-STATICFILES_STORAGE = (
-    # This is a string, not a tuple,
-    # but it does not fit into 80 characters rule.
-    'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-)
-
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Media files
 # https://docs.djangoproject.com/en/4.2/topics/files/
