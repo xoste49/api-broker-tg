@@ -6,6 +6,8 @@ values are overridden.
 """
 
 from server.settings.components import config
+from server.settings.components.common import MIDDLEWARE
+
 
 # Production flags:
 # https://docs.djangoproject.com/en/4.2/howto/deployment/
@@ -14,6 +16,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = config('DOMAINS').split(' ')
 
+MIDDLEWARE += (
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+)
 
 # Staticfiles
 # https://docs.djangoproject.com/en/4.2/ref/contrib/staticfiles/
@@ -26,7 +31,14 @@ _COLLECTSTATIC_DRYRUN = config(
 # Adding STATIC_ROOT to collect static files via 'collectstatic':
 STATIC_ROOT = '.static' if _COLLECTSTATIC_DRYRUN else '/var/www/django/static'
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
 
 # Media files
 # https://docs.djangoproject.com/en/4.2/topics/files/
@@ -49,16 +61,5 @@ AUTH_PASSWORD_VALIDATORS = [
 # Security
 # https://docs.djangoproject.com/en/4.2/topics/security/
 
-SECURE_HSTS_SECONDS = 31536000  # the same as Caddy has
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SECURE_REDIRECT_EXEMPT = [
-    # This is required for healthcheck to work:
-    '^health/',
-]
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False

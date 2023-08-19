@@ -35,6 +35,8 @@ RUN apt-get update && apt-get upgrade -y \
 
 WORKDIR /code
 
+RUN mkdir -p '/var/www/django/static' '/var/www/django/media'
+
 COPY ./poetry.lock ./pyproject.toml /code/
 
 # Project initialization:

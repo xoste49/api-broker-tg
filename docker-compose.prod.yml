@@ -19,14 +19,14 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
     ports:
-      - "8123:8000"
+      - "8123:8123"
     volumes:
       - django-static:/var/www/django/static
     env_file: ./config/.env
     environment:
       DJANGO_DATABASE_HOST: db
       DJANGO_ENV: production
-    command: python -Wd manage.py runserver 0.0.0.0:8000
+    command: gunicorn server.wsgi:application --bind 0.0.0.0:8123 -w 2 --timeout 120
 
   telegram:
     build:
