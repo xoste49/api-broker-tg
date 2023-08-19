@@ -14,7 +14,7 @@ from server.settings.components.common import MIDDLEWARE
 
 DEBUG = False
 
-ALLOWED_HOSTS = config('DOMAINS').split(' ')
+ALLOWED_HOSTS = config('DOMAINS').split(';')
 
 MIDDLEWARE += (
     'whitenoise.middleware.WhiteNoiseMiddleware',
